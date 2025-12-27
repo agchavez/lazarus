@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat CONCESA - Agente RAG V4</title>
+    <title>Chat CONCESA - Asistente Virtual</title>
     <style>
         * {
             margin: 0;
@@ -499,8 +499,8 @@
     </div>
 
     <script>
-        // Configuración
-        const API_URL = 'http://localhost:8000';
+        // Configuración - Detectar puerto automáticamente
+        const API_URL = window.location.origin;
         const SESSION_ID = 'user-' + Math.random().toString(36).substr(2, 9);
         let messageCount = 0;
         let totalTokens = 0;

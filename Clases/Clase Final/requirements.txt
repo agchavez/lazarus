@@ -3,30 +3,29 @@
 # ============================================================================
 
 # FastAPI y servidor
-fastapi==0.109.0
-uvicorn[standard]==0.27.0
-pydantic==2.5.3
-python-multipart==0.0.6
+fastapi>=0.109.0
+uvicorn[standard]>=0.27.0
+pydantic>=2.5.0
+python-multipart>=0.0.6
 
-# LangChain y componentes
-langchain==0.1.6
-langchain-community==0.0.19
-langchain-openai==0.0.5
-langchain-core==0.1.23
-langchain-text-splitters==0.0.1
+# LangChain y componentes (dejamos que pip resuelva las dependencias)
+langchain
+langchain-community
+langchain-openai
+langchain-text-splitters
 
 # OpenAI
-openai==1.10.0
+openai>=1.10.0
 
 # Vector Store (FAISS)
-faiss-cpu==1.7.4
+faiss-cpu>=1.7.4
 
 # PDF Processing
-pypdf==4.0.1
+pypdf>=4.0.0
 
 # Utilidades
-python-dotenv==1.0.0
-requests==2.31.0
+python-dotenv>=1.0.0
+requests>=2.31.0
 
 # Callbacks y tracking
-tiktoken==0.5.2
+tiktoken>=0.5.0

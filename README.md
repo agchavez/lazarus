@@ -1,8 +1,7 @@
 ![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)
 ![Python](https://img.shields.io/badge/python-3.7%2B-blue.svg)
 
-# Lazarus AI Development Module
-
+# Desarrollo de IA 
 Bienvenido al módulo de desarrollo de inteligencia artificial de Lazarus & Lazarus. Este proyecto está diseñado para facilitar la creación y gestión de aplicaciones de IA utilizando Python, proporcionando herramientas y recursos que optimizan el proceso de desarrollo.
 
 ## Características Principales
@@ -12,7 +11,7 @@ Bienvenido al módulo de desarrollo de inteligencia artificial de Lazarus & Laza
 - **Soporte para Múltiples Modelos**: Implementación de diversos modelos de IA para diferentes necesidades.
 
 ## Requisitos
-- Python 3.7 o superior
+- Python 3.11 o superior
 - Dependencias listadas en `requirements.txt`
 
 ## Instalación

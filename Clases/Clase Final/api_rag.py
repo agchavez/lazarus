@@ -583,8 +583,11 @@ def ingerir_documentos():
     embeddings = OpenAIEmbeddings(model=EMBEDDING_MODEL)
 
     # Cargar o crear vectorstore
-    index_path = os.path.join(VECTORSTORE_DIR, "index.faiss")
-    if os.path.exists(index_path):
+    index_faiss_path = os.path.join(VECTORSTORE_DIR, "index.faiss")
+    index_pkl_path = os.path.join(VECTORSTORE_DIR, "index.pkl")
+    
+    # Verificar que AMBOS archivos existan para cargar el vectorstore
+    if os.path.exists(index_faiss_path) and os.path.exists(index_pkl_path):
         logger.info(f"📦 Cargando vectorstore existente desde {VECTORSTORE_DIR}")
         vectorstore = FAISS.load_local(VECTORSTORE_DIR, embeddings, allow_dangerous_deserialization=True)
     else:

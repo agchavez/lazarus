@@ -11,7 +11,7 @@ Bienvenido al módulo de desarrollo de inteligencia artificial de Lazarus & Laza
 - **Soporte para Múltiples Modelos**: Implementación de diversos modelos de IA para diferentes necesidades.
 
 ## Requisitos
-- Python 3.7 o superior
+- Python 3.11 o superior
 - Dependencias listadas en `requirements.txt`
 
 ## Instalación

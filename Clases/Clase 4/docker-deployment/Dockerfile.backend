@@ -1,0 +1,27 @@
+# Dockerfile para Backend FastAPI + RAG
+FROM python:3.11-slim
+
+# Establecer directorio de trabajo
+WORKDIR /app
+
+# Copiar requirements
+COPY requirements.txt .
+
+# Instalar dependencias
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copiar archivos de la aplicación
+COPY api_rag.py .
+COPY Catalogo_Equipos_Construccion.pdf .
+
+# Crear directorio para vectorstore
+RUN mkdir -p vectorstore_db
+
+# Exponer puerto
+EXPOSE 8000
+
+# Variable de entorno para el archivo .env
+ENV PYTHONUNBUFFERED=1
+
+# Comando para ejecutar la aplicación
+CMD ["uvicorn", "api_rag:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]

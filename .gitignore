@@ -199,3 +199,6 @@ Thumbs.db
 
 .env
 .claude/
+*.md
+Lazarito-Chatbot/
+Lazarito-Chatbot

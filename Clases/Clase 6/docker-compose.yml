@@ -1,0 +1,142 @@
+version: '3.8'
+
+services:
+  # Ollama - Servidor de modelos locales
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama-server
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    environment:
+      - OLLAMA_KEEP_ALIVE=24h
+      - OLLAMA_HOST=0.0.0.0:11434
+    restart: unless-stopped
+    networks:
+      - langgraph-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Open WebUI - Interfaz web para Ollama (opcional)
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui
+    ports:
+      - "3000:8080"
+    environment:
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - WEBUI_SECRET_KEY=your-secret-key-change-this
+    volumes:
+      - open_webui_data:/app/backend/data
+    depends_on:
+      - ollama
+    restart: unless-stopped
+    networks:
+      - langgraph-network
+
+  # Redis - Para caché de respuestas
+  redis:
+    image: redis:7-alpine
+    container_name: redis-cache
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    restart: unless-stopped
+    networks:
+      - langgraph-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  # PostgreSQL - Para persistencia de checkpoints
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres-db
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=langgraph
+      - POSTGRES_PASSWORD=langgraph123
+      - POSTGRES_DB=langgraph_checkpoints
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    restart: unless-stopped
+    networks:
+      - langgraph-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U langgraph"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Jupyter Lab - Para desarrollar notebooks
+  jupyter:
+    image: jupyter/scipy-notebook:latest
+    container_name: jupyter-lab
+    ports:
+      - "8888:8888"
+    environment:
+      - JUPYTER_ENABLE_LAB=yes
+      - GRANT_SUDO=yes
+    volumes:
+      - ./notebooks:/home/jovyan/work
+      - ./data:/home/jovyan/data
+    command: start-notebook.sh --NotebookApp.token='' --NotebookApp.password=''
+    restart: unless-stopped
+    networks:
+      - langgraph-network
+    depends_on:
+      - ollama
+      - redis
+      - postgres
+
+networks:
+  langgraph-network:
+    driver: bridge
+    name: langgraph-net
+
+volumes:
+  ollama_data:
+    name: ollama_models
+  open_webui_data:
+    name: webui_data
+  redis_data:
+    name: redis_cache
+  postgres_data:
+    name: postgres_checkpoints
+
+# Comandos útiles:
+#
+# Iniciar todo:
+#   docker-compose up -d
+#
+# Ver logs:
+#   docker-compose logs -f
+#
+# Descargar modelo en Ollama:
+#   docker exec -it ollama-server ollama pull llama3.2
+#   docker exec -it ollama-server ollama pull mistral
+#   docker exec -it ollama-server ollama pull codellama
+#
+# Parar todo:
+#   docker-compose down
+#
+# Parar y eliminar volúmenes:
+#   docker-compose down -v
+#
+# Acceder a servicios:
+#   - Ollama API: http://localhost:11434
+#   - Open WebUI: http://localhost:3000
+#   - Jupyter Lab: http://localhost:8888
+#   - PostgreSQL: localhost:5432
+#   - Redis: localhost:6379

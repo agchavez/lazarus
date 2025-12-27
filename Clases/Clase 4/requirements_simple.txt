@@ -1,0 +1,31 @@
+# ============================================================================
+# Requirements SIMPLIFICADOS para RAG OpenAI V4
+# Instala solo las versiones más recientes compatibles
+# ============================================================================
+
+# Si requirements.txt da conflictos, usa este archivo:
+# pip install -r requirements_simple.txt
+
+# FastAPI y servidor
+fastapi
+uvicorn[standard]
+python-multipart
+
+# OpenAI y LangChain
+openai
+langchain
+langchain-community
+langchain-openai
+langchain-text-splitters
+
+# Procesamiento de documentos
+pypdf
+faiss-cpu
+
+# Utilidades
+python-dotenv
+requests
+
+# Validación de datos (FastAPI lo instala automáticamente)
+# pydantic
+# pydantic-settings
